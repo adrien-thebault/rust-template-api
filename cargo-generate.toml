@@ -1,0 +1,5 @@
+[template]
+cargo_generate_version = ">=0.20.0"
+# cliff.toml's own Tera templating syntax ({{ version }}, {% if %}, ...)
+# collides with cargo-generate's Liquid substitution - copy it as-is.
+exclude = ["cliff.toml"]

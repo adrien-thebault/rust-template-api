@@ -1,0 +1,21 @@
+[package]
+name = "web"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rust-toolbox = { workspace = true, features = ["tower", "axum"] }
+proto = { path = "../proto" }
+
+axum = { workspace = true }
+tokio = { workspace = true }
+tonic = { workspace = true }
+tower = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+clap = { workspace = true }
+dotenvy = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_derive = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }

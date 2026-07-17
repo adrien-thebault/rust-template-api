@@ -1,0 +1,48 @@
+syntax = "proto3";
+package {{crate_name}}.todo_service;
+
+import "google/protobuf/empty.proto";
+import "shared.proto";
+
+// Example CRUD entity - rename/reshape this (and everything under
+// services/todo-service/src/{model,repository,service}, plus this file)
+// to fit your own domain, then add more entities/services the same way -
+// one .proto file, one service crate under services/, one client wired into
+// web/src/main.rs's AppState.
+message Todo {
+  uint32 id = 1;
+  string title = 2;
+  bool done = 3;
+  // RFC3339 timestamp, set by the server
+  string created_at = 4;
+}
+
+message CreateTodoRequest {
+  string title = 1;
+}
+
+message GetTodoRequest { uint32 id = 1; }
+
+message UpdateTodoRequest {
+  uint32 id = 1;
+  string title = 2;
+  bool done = 3;
+}
+
+message DeleteTodoRequest { uint32 id = 1; }
+
+message ListTodosRequest {
+  optional {{crate_name}}.shared.PageRequest page_request = 1;
+}
+message ListTodosResponse {
+  repeated Todo todos = 1;
+  {{crate_name}}.shared.PageResponse page = 2;
+}
+
+service TodoService {
+  rpc CreateTodo(CreateTodoRequest) returns (Todo);
+  rpc GetTodo(GetTodoRequest) returns (Todo);
+  rpc UpdateTodo(UpdateTodoRequest) returns (Todo);
+  rpc DeleteTodo(DeleteTodoRequest) returns (google.protobuf.Empty);
+  rpc ListTodos(ListTodosRequest) returns (ListTodosResponse);
+}

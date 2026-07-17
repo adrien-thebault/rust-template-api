@@ -1,0 +1,30 @@
+[package]
+name = "todo-service"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_derive = { workspace = true }
+thiserror = { workspace = true }
+chrono = { workspace = true }
+
+rust-toolbox = { workspace = true, features = ["sqlite", "tower", "tonic"] }
+proto = { path = "../../proto" }
+
+diesel = { workspace = true }
+diesel_migrations = { workspace = true }
+
+tonic = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+clap = { workspace = true }
+dotenvy = { workspace = true }
+
+async-trait = { workspace = true }
+
+[dev-dependencies]
+tokio-stream = { workspace = true }

@@ -1,0 +1,37 @@
+syntax = "proto3";
+package {{crate_name}}.shared;
+
+// Mirrors rust_toolbox::diesel_tools::sort::{Sort, SortDirection} and
+// rust_toolbox::diesel_tools::pagination::PageRequest - the conversions
+// between them live in this crate's `shared` module (src/lib.rs), not in
+// the `rust-toolbox` crate itself, so that crate stays protobuf-agnostic.
+enum SortDirection {
+  SORT_DIRECTION_UNSPECIFIED = 0;
+  SORT_DIRECTION_ASC = 1;
+  SORT_DIRECTION_DESC = 2;
+}
+
+message SortField {
+  string field = 1;
+  SortDirection direction = 2;
+}
+
+// Mirrors rust_toolbox::diesel_tools::pagination::PageRequest. Absence of offset/size == Unpaged.
+message PageRequest {
+  optional int64 offset = 1;
+  optional int64 size = 2;
+  repeated SortField sort = 3;
+}
+
+// pagination metadata for a list response. Doesn't carry the actual items -
+// protobuf has no generics, so each concrete `ListXResponse` still declares
+// its own `repeated Item`; this message is embedded alongside it for
+// everything that isn't the item type itself. `next_page`/`previous_page`
+// are absent when there is no such page (already at the last/first page, or
+// the request was unpaged).
+message PageResponse {
+  int64 total_elements = 1;
+  PageRequest page_request = 2;
+  optional PageRequest next_page = 3;
+  optional PageRequest previous_page = 4;
+}

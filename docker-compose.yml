@@ -1,0 +1,30 @@
+services:
+  todo-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime-todo-service
+    container_name: {{project-name}}-todo-service
+    volumes:
+      - ./todo-service.db:/data/todo-service.db
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime-web
+    container_name: {{project-name}}-web
+    ports:
+      - "8080:8080"
+    environment:
+      TODO_SERVICE_ADDR: "http://todo-service:50051"
+      # dev defaults so `docker-compose up` works out of the box - override
+      # via a .env file (see .env.example) for anything beyond local testing.
+      # WEB_ADMIN_PASSWORD_SHA256 below is the sha256 of "admin".
+      WEB_SESSION_SECRET: "${WEB_SESSION_SECRET:-dev-only-change-me}"
+      WEB_ADMIN_USERNAME: "${WEB_ADMIN_USERNAME:-admin}"
+      WEB_ADMIN_PASSWORD_SHA256: "${WEB_ADMIN_PASSWORD_SHA256:-8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918}"
+    depends_on:
+      - todo-service
+    restart: unless-stopped
